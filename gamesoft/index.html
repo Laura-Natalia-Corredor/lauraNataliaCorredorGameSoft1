@@ -1,0 +1,398 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta http-equiv="X-UA-Compatible" content="IE=edge">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/css/bootstrap.min.css" rel="stylesheet" integrity="sha384-9ndCyUaIbzAi2FUVXJi0CjmCapSmO7SnpJef0486qhLnuZ2cdeRhO02iuK6FUUVM" crossorigin="anonymous">
+    <title>Document</title>
+    <style>
+        .col{
+            display: flex;
+            justify-content: center;
+        }
+        .card{
+            width: 18rem;
+            transition: all 1000ms;
+        }
+        .card:hover{
+            transform: scale(1.2);
+        }
+        .navbar.custom-bg{
+            background:url(https://www.idartes.gov.co/sites/default/files/styles/crop_imgpricipalnoticias/public/noticiasimg2/2021-04/stars-1837306_1280.jpg?itok=KHSaCrzg);
+            }
+        
+        #tablaClientes{
+          /* table-layout: fixed; */
+          word-wrap: break-word;
+        }
+      
+       #tablaProductos td{
+        background-color: rgb(39, 39, 39);
+        border-top: 1px;
+        border-bottom:1px;
+        border-style: solid;
+        border-color: rgb(64, 196, 232);
+        color: white;
+       }
+       #tablaProductos th{
+        background-color: rgb(39, 39, 39);
+        color: white;
+        border-top: 1px;
+        border-bottom:1px;
+        border-style: solid;
+        border-color: rgb(64, 196, 232);
+       }
+       video{
+        position: absolute;
+        top: 50%;
+        left: 50%;
+        transform: translate(-50%, -50%);
+        min-width: 100%;
+        min-height: 100%;
+      }
+       
+       #videoContainer{
+        position: fixed;
+        top: 0;
+        left: 0;
+        width: 100%;
+        height: 100%;
+        overflow: hidden;
+        z-index: -1;
+      }
+
+      .carousel{
+            max-width: 750px;
+        }
+      .carousel-item {
+        height: 300px;
+      }
+
+      .carousel-item img {
+            position: absolute;
+            top: 0;
+            left: 0;
+            min-height: 300px;
+      }
+      #logo{
+        width: 150px;
+        height: 150px;;
+      }
+      #superMario{
+        width:200px;
+        height:200px;
+        animation: rotate 60s infinite linear;
+      }
+      #luigi{
+        width:100px;
+        height:200px;
+        animation: rotate 60s infinite linear;
+      }
+      @keyframes rotate {
+        0% {
+            transform: rotatey(0deg);
+        }
+        100% {
+            transform: rotatey(360deg);
+        }
+    }
+        
+    </style>
+</head>
+<body>
+    <nav class="navbar navbar-expand-lg custom-bg ">
+        <div class="container-fluid">
+            <img id="logo" src="https://img.freepik.com/vector-premium/logotipo-retro-videojuegos-luces-neon_23-2148236553.jpg" alt="">
+          <a class="navbar-brand" href="#">GamersX</a>
+          <button class="navbar-toggler" type="button" data-bs-toggle="collapse" data-bs-target="#navbarSupportedContent" aria-controls="navbarSupportedContent" aria-expanded="false" aria-label="Toggle navigation">
+            <span class="navbar-toggler-icon"></span>
+          </button>
+          <div class="collapse navbar-collapse" id="navbarSupportedContent">
+
+            <ul class="navbar-nav me-auto mb-2 mb-lg-0">
+
+                <li class="nav-item">
+                    <a class="nav-link active text-white fs-4" aria-current="page" href="#">GameSoft</a>
+                  </li>
+              
+              <li class="nav-item dropdown">
+                <button class="nav-link dropdown-toggle text-white fs-4" onclick="botonNavClientes()"  href="#" data-bs-toggle="dropdown" aria-expanded="false">
+                  <!--HACE VISIBLE A LA TABLA DE CLIENTES CON LA FUNCION Y OCULTA LA TABLA DE ARTICULOS-->
+                  Clientes
+                </button>
+                <ul class="dropdown-menu">
+                  <!--DESPLIEGA EL MODAL FORMULARIO PARA CREAR UN NUEVO CLIENTE Y LIMPIA LAS CAJAS DE LOS INPUT-->
+                  <li><button class="nav-link" href="#" data-bs-toggle="modal" onclick="limpiarCajas()" data-bs-target="#ModalAgregarClientes">Agregar Cliente</button></li>
+                </ul>
+              </li>
+              <li class="nav-item dropdown">
+                <!--HACE VISIBLE LA TABLA DE ARTICULOS Y OCULTA LA TABLA DE CLIENTES-->
+                <button class="nav-link dropdown-toggle text-white fs-4" href="#" onclick="botonNavProductos()" role="button" data-bs-toggle="dropdown" aria-expanded="false">
+                  Gestion de Juegos
+                </button>
+                <ul class="dropdown-menu">
+                  <!--DESPLIEGA EL MODAL FORMULARIO PARA CREAR UN NUEVO ARTICULO Y LIMPIA LAS CAJAS DE LOS INPUT-->
+                  <li><button class="nav-link " href="#" data-bs-toggle="modal" onclick="limpiarCajas2()" data-bs-target="#ModalAgregarProductos">Agregar producto</button></li>
+                </ul>
+              </li>
+              <li class="nav-item">
+                <button class="nav-link active text-white fs-4" onclick="botonNavFidelizacion()" aria-current="page" href="#">Fidelizacion</button>
+              </li>
+              
+            </ul>
+
+            <form class="d-flex" role="search">
+              <input id="textoBusqueda" class="form-control me-2" type="search" placeholder="Ingrese el nombre del juego" aria-label="Search">
+              <button id="botonBusqueda" class="btn btn-outline-success" type="submit">Buscar juego</button>
+            </form>
+          </div>
+        </div>
+      </nav>
+
+
+      <div class="row">
+        <div id="publicidadPag" class="col-1">
+        </div>
+        <div id="contenedorInformacion" class="col-10 px-1">
+
+          <!--MUESTRA LA TABLA DE LOS CLIENTES-->
+          <div class="col-12 text-center mt-5 table-responsive">
+            <table id="tablaClientes" class="table table-sm th-sm table-dark visually-hidden" style="width:100%;">
+              <thead>
+                <tr>
+                  <th scope="col">Compras</th>
+                  <th scope="col">Documento</th>
+                  <th scope="col">Nombres</th>
+                  <th scope="col">Apellidos</th>
+                  <th scope="col">Telefono</th>
+                  <th scope="col">Correo</th>
+                  <th scope="col">Nacimiento</th>
+                  <th scope="col">Nacionalidad</th>
+                  <th scope="col">Puntos</th>
+                  <th scope="col">
+                    <div class="d-flex" role="search">
+                      <input id="buscarClienteInput" style="width: 120px;" class="form-control me-2" type="search" placeholder="Search" aria-label="Search">
+                    </div>
+                  </th>
+                  <th scope="col">
+                    <button class="btn btn-outline-success" id="botonBusquedaCliente" type="button">Search</button>
+                  </th>
+                </tr>
+              </thead>
+              <tbody id="tbody1">
+              </tbody>
+            </table>
+          </div>
+
+          <!--MUESTRA LA TABLA DE LOS ARTICULOS-->
+          <div class="col-12 text-center rounded-top rounded-bottom mt-4 table-responsive">
+            <table id="tablaProductos" class="table table-striped fondo visually-hidden py-1">
+              <thead>
+                <tr>
+                  <th scope="col">ID</th>
+                  <th scope="col">Nombre</th>
+                  <th scope="col">Valor</th>
+                  <th scope="col">Tematica</th>
+                  <th scope="col">Puntos Fidelización</th>
+                  <th scope="col"></th>
+                </tr>
+              </thead>
+              <tbody id="tbody2">
+              </tbody>
+            </table>
+        </div>
+         
+        <!--MUESTRA LA TABLA DE FIDELIZACION-->
+        <div class="col-12 text-center mt-5 table-responsive">
+            <table id="tablaFidelizacion" class="table  table-dark visually-hidden" style="width:100%;">
+              <thead>
+                <tr>
+                  <th scope="col">Documento</th>
+                  <th scope="col">Nombres</th>
+                  <th scope="col">Apellidos</th>
+                  <th scope="col">Puntos</th>
+                </tr>
+              </thead>
+              <tbody id="tbody3">
+              </tbody>
+            </table>
+          </div>
+
+
+            <!--CAROUSEL DE IMAGENES-->
+            <div id="carouselFotos" class="">
+                <div class="row">
+                    <div class="col-2 d-flex justify-content-center align-items-center">
+                        <img id="superMario" src="superMario1.png" alt="">
+                    </div>
+                    <div id="carouselExampleCaptions" class="carousel slide carrusel container col-8"data-bs-ride="carousel">
+                    <div class="carousel-indicators">
+                    <button type="button" data-bs-target="#carouselExampleCaptions" data-bs-slide-to="0" class="active" aria-current="true" aria-label="Slide 1"></button>
+                    <button type="button" data-bs-target="#carouselExampleCaptions" data-bs-slide-to="1" aria-label="Slide 2"></button>
+                    <button type="button" data-bs-target="#carouselExampleCaptions" data-bs-slide-to="2" aria-label="Slide 3"></button>
+                    </div>
+                    <div class="carousel-inner">
+                    <div class="carousel-item active" data-bs-interval="5000">
+                        <img src="https://cdn.atomix.vg/wp-content/uploads/2023/05/smb.jpg" class=" d-block w-100 object-fit-md " alt="...">
+                        <div class="carousel-caption d-none d-md-block">
+                        <h5>Nuevo juegos a la venta</h5>
+                        <p></p>
+                        </div>
+                    </div>
+                    <div class="carousel-item" data-bs-interval="5000">
+                        <img src="https://cloudfront-us-east-1.images.arcpublishing.com/eluniverso/PRSRJ3URVNBE3KXFP76256SCAM.jpg" class="d-block w-100" alt="...">
+                        <div class="carousel-caption d-none d-md-block">
+                        <h5>Muchos descuentos</h5>
+                        <p></p>
+                        </div>
+                    </div>
+                    <div class="carousel-item" data-bs-interval="5000">
+                        <img src="https://i.blogs.es/3626ec/mario-bros-pelicula/1366_521.jpeg" class="d-block w-100" alt="...">
+                        <div class="carousel-caption d-none d-md-block">
+                        <h5>Solo por hoy</h5>
+                        <p></p>
+                        </div>
+                    </div>
+                    </div>
+                    <button class="carousel-control-prev" type="button" data-bs-target="#carouselExampleCaptions" data-bs-slide="prev">
+                    <span class="carousel-control-prev-icon" aria-hidden="true"></span>
+                    <span class="visually-hidden">Previous</span>
+                    </button>
+                    <button class="carousel-control-next" type="button" data-bs-target="#carouselExampleCaptions" data-bs-slide="next">
+                    <span class="carousel-control-next-icon" aria-hidden="true"></span>
+                    <span class="visually-hidden">Next</span>
+                    </button>
+                </div>
+                <div class="col-2 d-flex justify-content-center align-items-center">
+                    <img id="luigi" src="luigi.png" alt="">
+                </div>
+              </div>
+              </div>
+            
+
+            <!--MUESTRA LOS ARTICULOS EN CARDS-->
+            <div id="contenedorCards" class="row row-cols-1 row-cols-lg-4 row-cols-md-3 row-cols-sm-2 g-4 mt-3 mb-4">
+                <!--col-xl-3 col-lg-4 col-md-6 col-sm-6 col--->
+
+                  <!--FORMULARIO PARA CREAR Y EDITAR UN CLIENTE-->
+                  <div class="modal fade" id="ModalAgregarClientes" tabindex="-1" aria-labelledby="exampleModalLabel" aria-hidden="true">
+                      <div class="modal-dialog">
+                          <div class="modal-content">
+                              <div id="formulario1" class="row g-3 formulario p-4 rounded-2">
+                                  <div class="col-md-12">
+                                    <label for="nombresInput" class="form-label">Nombre</label>
+                                    <input type="text" class="form-control" id="nombresInput">
+                                  </div>
+                                  <div class="col-12">
+                                    <label for="apellidosInput" class="form-label">Apellido</label>
+                                    <input type="text" class="form-control" id="apellidosInput" placeholder="1234 Main St">
+                                  </div>
+                                  <div class="col-md-6">
+                                    <label for="documentoInput" class="form-label">Numero de documento</label>
+                                    <input type="text" class="form-control" id="documentoInput">
+                                  </div>
+                                  <div class="col-md-6">
+                                    <label for="telefonoInput" class="form-label">Telefono</label>
+                                    <input type="text" class="form-control" id="telefonoInput">
+                                  </div>
+                                  <div class="col-12">
+                                    <label for="correoInput" class="form-label">Correo</label>
+                                    <input type="text" class="form-control" id="correoInput" placeholder="Apartment, studio, or floor">
+                                  </div>
+                                  <div class="col-md-6">
+                                    <label for="fechaNacimientoInput" class="form-label">Fecha de Nacimiento</label>
+                                    <input type="text" class="form-control" id="fechaNacimientoInput">
+                                  </div>
+                                  <div class="col-md-6">
+                                    <label for="nacionalidadInput" class="form-label">Nacionalidad</label>
+                                    <input type="text" class="form-control" id="nacionalidadInput">
+                                  </div>
+                                  
+                                  <div class="col-12">
+                                    <button id="botonAgregar" type="button" data-bs-dismiss="modal" onclick="agregaraclientesMap()" class="btn btn-primary">Agregar</button>
+                                  </div>
+                                  <div class="col-12">
+                                    <button id="botonEditarFinal" type="button" data-bs-dismiss="modal" onclick="editarCliente()" class="btn btn-primary visually-hidden">Editar</button>
+                                  </div>
+                              </div>
+                          </div>
+                      </div>
+                  </div>
+
+                    <!--FORMULARIO PARA AGREGAR UN NUEVO ARTICULO-->
+                    <div class="modal fade" id="ModalAgregarProductos" tabindex="-1" aria-labelledby="exampleModalLabel" aria-hidden="true">
+                      <div class="modal-dialog">
+                          <div class="modal-content">
+                            <div id="formulario2" class="row g-3 formulario p-4 rounded-2">
+                              <div class="col-md-12">
+                                <label for="productoNombreInput" class="form-label">Nombre de la producto</label>
+                                <input type="text" class="form-control" id="productoNombreInput">
+                              </div>
+                              <div class="col-4">
+                                <label for="productoValorInput" class="form-label">Valor del tiquete</label>
+                                <input type="text" class="form-control" id="productoValorInput" placeholder="">
+                              </div>
+                              <div class="col-4">
+                                <label for="productotematicaJuegoInput" class="form-label">Ciudad de Origen</label>
+                                <input type="text" class="form-control" id="productotematicaJuegoInput" placeholder="">
+                              </div>
+                              <div class="col-6">
+                                <label for="productoPuntosFidelizacion" class="form-label">Puntos de Fidelización</label>
+                                <input type="text" class="form-control" id="productoPuntosFidelizacion" placeholder="">
+                              </div>
+                              <div class="col-12">
+                                <button id="botonAgregarProducto" type="button" data-bs-dismiss="modal" onclick="agregaraProductosMap()" class="btn btn-primary">Agregar</button>
+                              </div>
+                            </div>
+                          </div>
+                      </div>
+                    </div>
+
+                    <!--MODAL PARA MOSTRAR FACTURA DATOS DEL CLIENTE Y DATOS DEL PRODUCTO-->
+                    <div class="modal fade" id="ModalCompras" tabindex="-1" aria-labelledby="exampleModalLabel" aria-hidden="true">
+                      <div class="modal-dialog">
+                          <div class="modal-content">
+                            <div id="formulario3" class="row g-4 formulario p-4 rounded-2 m-2">
+                              
+                              <!-- <div class="col-12">
+                                <button id="botonConfirmarVenta" type="button" data-bs-dismiss="modal" onclick="" class="btn btn-primary">Agregar</button>
+                              </div> -->
+                            </div>
+                          </div>
+                      </div>
+                    </div>
+
+
+
+
+
+
+
+
+
+
+
+
+            </div>  
+              
+                
+            
+
+        </div>
+        <div class="col-1">
+
+        </div>
+
+      </div>
+
+      <!--VIDEO DE FONDO DE LA PAGINA-->
+      <div id="videoContainer" class="">
+        <video src="videoFondo1.mp4" onloadedmetadata="this.muted=true" autoplay loop>
+      
+        </video>
+      </div>
+      <script src="Gamesoft.js"></script>
+</body>
+<script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/js/bootstrap.bundle.min.js" integrity="sha384-geWF76RCwLtnZ8qwWowPQNguL3RmwHVBC9FhGdlKrxdiJJigb/j/68SIy3Te4Bkz" crossorigin="anonymous"></script>
+</html>
